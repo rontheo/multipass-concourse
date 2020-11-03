@@ -16,3 +16,17 @@ Install ansible on OSX: https://formulae.brew.sh/formula/ansible
 ```
 ansible-playbook ~/multipass-concoure/concourse-deploy.yml
 ```
+## Access concourse-ci
+```
+http://multipass-ip:8080 
+
+username: test
+password: test
+```
+## Access multipass shell
+```
+$ multipass shell concourse-ci
+
+$ls
+docker-compose.yml
+```
