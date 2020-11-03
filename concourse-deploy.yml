@@ -1,0 +1,59 @@
+---
+- name: "launch concourse"
+  hosts: localhost
+  connection: local
+  tasks: 
+    - name: "setup concourse"
+      shell: 
+         zsh ~/multipass-concourse/concourse-deploy.sh 
+      register: shell_result
+
+    - debug: 
+       var: shell_result.stdout_lines
+
+    - name: check concourse-ci is running 
+      shell:  multipass list | grep concourse-ci
+      register: concourse_hostname
+
+    - debug:
+       var: concourse_hostname.stdout_lines
+
+    - name: start concourse-ci 
+      shell:  multipass start concourse-ci
+      register: concourse_start
+
+    - debug:
+       var: concourse_start.stdout_lines
+
+    - name: transfer file to /tmp
+      shell: | 
+        multipass transfer ~/multipass-concourse/docker-install.sh concourse-ci:/tmp/docker-install.sh
+        multipass transfer ~/multipass-concourse/docker-compose.sh concourse-ci:/tmp/docker-compose.sh
+        multipass exec concourse-ci sudo chmod 0755 /tmp/docker-install.sh 
+        multipass exec concourse-ci sudo chmod 0755 /tmp/docker-compose.sh 
+      register: docker_cp
+
+    - debug:
+       var: docker_cp.stdout_lines 
+
+    - name: executing docker install
+      shell: |
+         multipass exec concourse-ci sudo bash /tmp/docker-install.sh
+      register: docker_install
+
+    - debug:
+       var: docker_install.stdout_lines
+
+    - name: executing docker compose 
+      shell: |
+         multipass exec concourse-ci sudo bash /tmp/docker-compose.sh
+      register: docker_compose
+
+    - debug:
+       var: docker_compose.stdout_lines
+
+
+
+
+
+
