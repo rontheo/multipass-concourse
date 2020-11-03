@@ -7,7 +7,7 @@ cpu: 2
 disk: 20G
 memory 1G
 
-#Requirements
+# Requirements
 ```
 Install multipass on macOS: https://multipass.run/docs/installing-on-macos
 Install ansible on OSX: https://formulae.brew.sh/formula/ansible
